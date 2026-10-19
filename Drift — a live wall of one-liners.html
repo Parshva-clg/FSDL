@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DRIFT — a wall of one-liners</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3efe6;--fg:#15131a;--mut:#6d6a72;--card:#fff;--line:#15131a22;--acc:#ff4d2e;--acc2:#5b3df5;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0d12;--fg:#f4f1ea;--mut:#9a97a3;--card:#18161f;--line:#f4f1ea22}}
+:root[data-theme="dark"]{--bg:#0e0d12;--fg:#f4f1ea;--mut:#9a97a3;--card:#18161f;--line:#f4f1ea22}
+*{box-sizing:inherit;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--fg);font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow-x:hidden;min-height:100%}
+.blob{position:fixed;width:38vmax;height:38vmax;border-radius:50%;background:radial-gradient(circle,var(--acc2),transparent 65%);opacity:.28;filter:blur(30px);pointer-events:none;left:0;top:0;transform:translate(-50%,-50%);z-index:0}
+main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 20px 80px}
+.tag{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);padding-top:28px}
+h1{font-size:clamp(64px,19vw,210px);line-height:.85;font-weight:800;letter-spacing:-.04em;margin:18px 0 8px}
+h1 span{display:inline-block;overflow:hidden;vertical-align:top}
+h1 span i{display:inline-block;font-style:normal;transform:translateY(110%) rotate(8deg);animation:up .9s cubic-bezier(.2,.9,.2,1) forwards}
+h1 span:nth-child(2) i{animation-delay:.07s}h1 span:nth-child(3) i{animation-delay:.14s}h1 span:nth-child(4) i{animation-delay:.21s}h1 span:nth-child(5) i{animation-delay:.28s}
+h1 .dot{color:var(--acc)}
+@keyframes up{to{transform:none}}
+.lede{max-width:520px;color:var(--mut);font-size:18px;line-height:1.4;opacity:0;animation:fade .8s .6s forwards}
+@keyframes fade{to{opacity:1}}
+.marq{margin:36px -20px;border-block:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:10px 0;font-family:'DM Mono',monospace;font-size:14px}
+.marq div{display:inline-block;animation:mq 22s linear infinite}
+.marq b{color:var(--acc);margin:0 18px}
+@keyframes mq{to{transform:translateX(-50%)}}
+form{display:grid;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:40px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+input[type=text]{flex:1 1 240px;font:inherit;font-size:22px;font-weight:500;color:var(--fg);background:transparent;border:0;border-bottom:2px solid var(--line);padding:8px 2px;outline:0;transition:border-color .3s}
+input[type=text]:focus{border-color:var(--acc)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-family:'DM Mono',monospace;font-size:13px;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:99px;padding:7px 14px;cursor:pointer;transition:transform .35s cubic-bezier(.3,1.8,.5,1),background .2s}
+.chip:hover{transform:scale(1.08)}.chip[aria-pressed=true]{background:var(--fg);color:var(--bg)}
+.go{font:inherit;font-weight:800;font-size:18px;border:0;border-radius:99px;padding:14px 28px;background:var(--acc);color:#fff;cursor:pointer;transition:transform .15s}
+.go:active{transform:scale(.94)}
+.meta{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:12px;color:var(--mut)}
+.wall{columns:3 260px;column-gap:16px}
+.note{break-inside:avoid;margin:0 0 16px;border-radius:20px;padding:22px;color:#15131a;font-size:clamp(22px,3.2vw,34px);font-weight:800;line-height:1.05;letter-spacing:-.02em;position:relative;opacity:0}
+.note small{display:block;margin-top:14px;font:12px 'DM Mono',monospace;letter-spacing:0;opacity:.6;font-weight:400}
+.note.in{opacity:1;animation:var(--m) .9s cubic-bezier(.2,.9,.2,1) both,bob 6s ease-in-out infinite .9s;animation-delay:var(--d,0s),calc(var(--d,0s) + .9s)}
+.note:hover{transform:rotate(-1.5deg) scale(1.03);transition:transform .3s cubic-bezier(.3,1.8,.5,1)}
+@keyframes rise{from{transform:translateY(60px);opacity:0}}
+@keyframes spin{from{transform:rotate(-14deg) scale(.4);opacity:0}}
+@keyframes bounce{0%{transform:translateY(-120px);opacity:0}60%{transform:translateY(12px);opacity:1}80%{transform:translateY(-6px)}}
+@keyframes blur{from{filter:blur(18px);transform:scale(1.2);opacity:0}}
+@keyframes bob{50%{translate:0 -5px}}
+.empty{color:var(--mut);font-family:'DM Mono',monospace}
+.status{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));font:11px 'DM Mono',monospace;background:var(--card);border:1px solid var(--line);padding:6px 10px;border-radius:99px;z-index:5}
+.reveal{opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.2,.9,.2,1)}.reveal.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div class="blob" id="blob"></div>
+<main>
+  <div class="tag">A shared wall · live · no sign-up</div>
+  <h1 aria-label="Drift"><span><i>D</i></span><span><i>r</i></span><span><i>i</i></span><span><i>f</i></span><span><i>t</i></span><span class="dot"><i>.</i></span></h1>
+  <p class="lede">Leave a few words. Pick how they arrive. Everyone who opens this page sees the wall fill up in real time.</p>
+
+  <div class="marq" aria-hidden="true"><div id="mq"></div></div>
+
+  <form id="f" class="reveal" autocomplete="off">
+    <div class="row"><input type="text" id="t" maxlength="60" placeholder="Say something small…" required aria-label="Your words"></div>
+    <div class="chips" id="chips" role="group" aria-label="Entrance motion">
+      <button type="button" class="chip" data-m="rise" aria-pressed="true">↑ rise</button>
+      <button type="button" class="chip" data-m="spin" aria-pressed="false">↻ spin</button>
+      <button type="button" class="chip" data-m="bounce" aria-pressed="false">⤓ bounce</button>
+      <button type="button" class="chip" data-m="blur" aria-pressed="false">◌ blur</button>
+    </div>
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div class="meta" style="gap:12px"><span id="cnt">0 / 60</span></div>
+      <button class="go" id="go" type="submit">Drift it →</button>
+    </div>
+  </form>
+
+  <section class="wall" id="wall"><p class="empty" id="empty">Loading the sky…</p></section>
+</main>
+<div class="status" id="st">connecting…</div>
+
+<script>
+(function(){
+  var COLORS=['#ffd6a5','#caffbf','#9bf6ff','#bdb2ff','#ffc6ff','#fdffb6','#ffadad'];
+  var wall=document.getElementById('wall'),empty=document.getElementById('empty'),st=document.getElementById('st');
+  var input=document.getElementById('t'),cnt=document.getElementById('cnt'),mode='rise',db=null,local=[],seen={};
+
+  // marquee
+  var words=['rise','spin','bounce','blur','drift','float','ease','spring','loop','glide'];
+  var mq=words.concat(words).map(function(w){return w+'<b>✦</b>'}).join('');
+  document.getElementById('mq').innerHTML=mq+mq;
+
+  // cursor blob (lerped)
+  var bx=innerWidth/2,by=innerHeight/3,tx=bx,ty=by,blob=document.getElementById('blob');
+  addEventListener('pointermove',function(e){tx=e.clientX;ty=e.clientY});
+  (function loop(){bx+=(tx-bx)*.06;by+=(ty-by)*.06;blob.style.left=bx+'px';blob.style.top=by+'px';requestAnimationFrame(loop)})();
+
+  // scroll reveal
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('on')})},{threshold:.2});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+
+  // chips
+  document.getElementById('chips').addEventListener('click',function(e){
+    var b=e.target.closest('.chip');if(!b)return;mode=b.dataset.m;
+    this.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed',c===b)});
+  });
+  input.addEventListener('input',function(){cnt.textContent=input.value.length+' / 60'});
+
+  function ago(ts){var s=Math.max(1,(Date.now()-ts)/1000|0);if(s<60)return 'just now';if(s<3600)return (s/60|0)+'m ago';if(s<86400)return (s/3600|0)+'h ago';return (s/86400|0)+'d ago'}
+
+  function card(n,i,fresh){
+    var d=document.createElement('div');d.className='note';
+    d.style.background=COLORS[(n.hue|0)%COLORS.length];
+    d.style.setProperty('--m',n.motion||'rise');
+    d.style.setProperty('--d',(fresh?0:Math.min(i,12)*.06)+'s');
+    var t=document.createTextNode(n.text);d.appendChild(t);
+    var s=document.createElement('small');s.textContent=(n.motion||'rise')+' · '+ago(n.ts||Date.now());d.appendChild(s);
+    requestAnimationFrame(function(){d.classList.add('in')});
+    return d;
+  }
+
+  function renderAll(list){
+    wall.innerHTML='';
+    if(!list.length){wall.appendChild(empty);empty.textContent='Nothing here yet. Be the first to drift something.';return}
+    list.forEach(function(n,i){wall.appendChild(card(n,i,false))});
+  }
+
+  // backend: shared db with live subscription
+  function start(){
+    if(!window.claude){fallback();return}
+    claude.use('db').then(function(d){
+      if(!d){fallback();return}
+      db=d;st.textContent='● live';
+      var first=true;
+      db.collection('notes').orderBy('ts','desc').limit(60).onSnapshot(function(snap){
+        if(first){first=false;renderAll(snap.docs.map(function(x){return x.data()}));snap.docs.forEach(function(x){seen[x.id]=1});return}
+        snap.docChanges().forEach(function(c){
+          if(c.type==='added'&&!seen[c.doc.id]){seen[c.doc.id]=1;if(empty.parentNode)empty.remove();wall.insertBefore(card(c.doc.data(),0,true),wall.firstChild)}
+        });
+      },function(){st.textContent='offline';});
+    }).catch(fallback);
+  }
+  function fallback(){st.textContent='local only';renderAll(local)}
+
+  document.getElementById('f').addEventListener('submit',function(e){
+    e.preventDefault();
+    var text=input.value.trim();if(!text)return;
+    var n={text:text,motion:mode,hue:Math.random()*COLORS.length|0,ts:Date.now()};
+    input.value='';cnt.textContent='0 / 60';
+    if(db){
+      db.collection('notes').add(n).then(function(r){seen[r.id]=1}).catch(function(){st.textContent='write blocked'});
+      if(empty.parentNode)empty.remove();wall.insertBefore(card(n,0,true),wall.firstChild);
+    }else{local.unshift(n);if(empty.parentNode)empty.remove();wall.insertBefore(card(n,0,true),wall.firstChild)}
+  });
+
+  start();
+})();
+</script>
+</body>
+</html>
